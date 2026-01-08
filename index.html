@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asiento - Криптовалютные операции</title>
+    <link rel="icon" href="images/whale.ico" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary: #3a7bff;
+            --dark: #121212;
+            --dark-gray: #1e1e1e;
+            --light: #f5f5f5;
+            --gray: #bbbbbb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            background: rgba(18, 18, 18, 0.9);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .hero {
+            padding: 180px 0 100px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../images/hero_background.jpg') center/cover no-repeat;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: var(--gray);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(58, 123, 255, 0.3);
+        }
+        
+        .features {
+            padding: 80px 0;
+            background: var(--dark-gray);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(58, 123, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .feature-icon img {
+            width: 40px;
+        }
+        
+        .services {
+            padding: 80px 0;
+        }
+        
+        .services-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .service-card {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--bg-image) center/cover no-repeat;
+            padding: 40px 30px;
+            border-radius: 10px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(58, 123, 255, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .service-card:hover::after {
+            opacity: 1;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .service-card p {
+            color: var(--gray);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+        }
+        
+        .service-card .more-link {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            z-index: 2;
+        }
+        
+        .service-card .more-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .service-card .more-link::after {
+            content: '→';
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover .more-link::after {
+            transform: translateX(3px);
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .modal-content {
+            background: var(--dark-gray);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        
+        .modal-text {
+            color: var(--light);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .modal-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .modal-btn-secondary {
+            background: #444;
+            color: #ddd;
+        }
+        
+        footer {
+            background: #111;
+            padding: 30px 0;
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <h1>Asiento</h1>
+            <p>Наша команда поможет купить и продать криптовалюту законно — с официальными договорами и корректной уплатой налогов.<br>Мы не обещаем, мы прогнозируем.</p>
+            <button id="contactBtn" class="btn">Начать работу</button>
+        </div>
+    </section>
+    
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Наши преимущества</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="images/security_sticker.png" alt="Безопасность">
+                    </div>
+                    <h3>Юридическая безопасность</h3>
+                    <p>Через договоры и уплату налогов.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="images/sellers_sticker.png" alt="Продавцы">
+                    </div>
+                    <h3>Опытные брокеры</h3>
+                    <p>Надёжные специалисты с опытом в трейдинге.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="images/communication_sticker.png" alt="Поддержка">
+                    </div>
+                    <h3>Удобное взаимодействие</h3>
+                    <p>Через Telegram-бота и Telegram-канал.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="images/support_sticker.png" alt="Гарантии">
+                    </div>
+                    <h3>Поддержка</h3>
+                    <p>Большое количество специалистов.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="services">
+        <div class="container">
+            <h2 class="section-title">Узнать больше</h2>
+            <div class="services-list">
+                <div class="service-card" style="--bg-image: url('images/block1.jpg')" data-link="service/exchange.html">
+                    <h3>Инвестиции в криптовалюту</h3>
+                    <p>Узнайте о доступных в нашем ассортименте цифровых активах, их возможностях и ключевых характеристиках — ликвидности, преимуществах и применимых рисках.</p>
+                    <a href="service/exchange.html" class="more-link">Подробнее</a>
+                </div>
+                
+                <div class="service-card" style="--bg-image: url('images/block2.jpg')" data-link="service/guarantee.html">
+                    <h3>Процесс совершения сделок</h3>
+                    <p>Процесс сделок и юридические гарантии: оформление через договор, подбор брокера через Telegram, согласование курса и комиссий, оплата удобным способом, выдача чеков/выписок для налоговой и соблюдение процедур идентификации и проверки контрагентов.</p>
+                    <a href="service/guarantee.html" class="more-link">Подробнее</a>
+                </div>
+                
+                <div class="service-card" style="--bg-image: url('images/block4.jpg')" data-link="service/community.html">
+                    <h3>Сообщество трейдеров</h3>
+                    <p>Обучение и обмен опытом с профессиональными трейдерами: аналитика рынка и торговые сигналы для принятия обоснованных решений.</p>
+                    <a href="service/community.html" class="more-link">Подробнее</a>
+                </div>
+                
+                <div class="service-card" style="--bg-image: url('images/block5.jpg')" data-link="service/partners.html">
+                    <h3>Стать партнёром</h3>
+                    <p>Станьте брокером — официальный доход с сопровождением 3‑НДФЛ и комиссиями от 1% до 50%; заключайте сделки, выполняйте продуктовые и маркетинговые рекомендации, пройдите тестовый период и приступайте к работе.</p>
+                    <a href="service/partners.html" class="more-link">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="legal-notice">
+            <p>&copy; 2026 Asiento. Цифровые финансовые активы не являются платёжным средством в РФ.</p>
+            <div class="footer-links">
+                <a href="service/conf.html">Политика конфиденциальности и использования</a>
+                <div class="law-references">
+                    <a href="https://www.consultant.ru/document/cons_doc_LAW_358753/" target="_blank" rel="noopener noreferrer">ФЗ-259</a>
+                    <a href="https://www.consultant.ru/document/cons_doc_LAW_32834/" target="_blank" rel="noopener noreferrer">ФЗ-115</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <style>
+        footer {
+            background: #111;
+            padding: 25px 0;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .legal-notice {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .legal-notice p {
+            color: var(--gray);
+            font-size: clamp(0.8rem, 2.5vw, 0.85rem);
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        
+        .law-references {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 480px) {
+            .footer-links {
+                flex-direction: column;
+            }
+            
+            .law-references {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+
+    <div id="tgModal" class="modal-overlay">
+        <div class="modal-content">
+            <p class="modal-text">Вы будете перенаправлены в наш Telegram-канал. Продолжить?</p>
+            <div class="modal-buttons">
+                <button id="cancelBtn" class="modal-btn modal-btn-secondary">Остаться</button>
+                <button id="confirmBtn" class="modal-btn modal-btn-primary">Перейти</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const contactBtn = document.getElementById('contactBtn');
+        const modal = document.getElementById('tgModal');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const serviceCards = document.querySelectorAll('.service-card');
+        
+        contactBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        confirmBtn.addEventListener('click', () => {
+            window.location.href = 'https://t.me/asiento_ch';
+        });
+        
+        const closeModal = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+        
+        cancelBtn.addEventListener('click', closeModal);
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        serviceCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('more-link') && 
+                    !e.target.parentElement.classList.contains('more-link')) {
+                    const link = card.getAttribute('data-link');
+                    window.location.href = link;
+                }
+            });
+        });
+        
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .service-card');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        window.addEventListener('load', () => {
+            const elements = document.querySelectorAll('.feature-card, .service-card');
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            animateOnScroll();
+        });
+        
+        let isScrolling;
+        window.addEventListener('scroll', () => {
+            window.cancelAnimationFrame(isScrolling);
+            isScrolling = window.requestAnimationFrame(animateOnScroll);
+        });
+    </script>
+</body>
+</html>
